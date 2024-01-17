@@ -1,0 +1,27 @@
+class Trip {
+  final String id;
+  final List<String> categories;
+  final String title;
+  final String imageUrl;
+  final String price;
+  final String description;
+  final String made;
+  final String delivery;
+  final String guarantee;
+  final String quantity;
+  final String phone;
+
+  const Trip({
+    required this.id,
+    required this.categories,
+    required this.imageUrl,
+    required this.title,
+    required this.price,
+    required this.description,
+    required this.made,
+    required this.quantity,
+    required this.delivery,
+    required this.guarantee,
+    required this.phone,
+  });
+}

@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+import 'package:store_app/screens/trip_detail_screen.dart'; // Import the AppState class
+
+class FavoritesScreen extends StatefulWidget {
+  const FavoritesScreen({Key? key}) : super(key: key);
+
+  static const screenRoute = '/favoritespage';
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _FavoritesScreenState createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Favorite Page',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: ListView.builder(
+        itemCount: AppState.favoriteItems.length,
+        itemBuilder: (context, index) {
+          final item = AppState.favoriteItems[index];
+
+          return Dismissible(
+            key: Key(item), // Unique key for each item
+            onDismissed: (direction) {
+              // Remove item from the list when dismissed
+              setState(() {
+                AppState.favoriteItems.removeAt(index);
+              });
+
+              // Show a snackbar indicating the item is removed
+              final snackBar = SnackBar(
+                content: Text('$item removed from favorites'),
+                duration: const Duration(seconds: 2),
+                backgroundColor: Colors.red,
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    // Perform undo action
+                    setState(() {
+                      AppState.favoriteItems.insert(index, item);
+                    });
+                  },
+                ),
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 16.0),
+              child: const Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+            child: ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(item),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      // Remove item from the list when delete icon is pressed
+                      setState(() {
+                        AppState.favoriteItems.removeAt(index);
+                      });
+
+                      // Show a snackbar indicating the item is removed
+                      final snackBar = SnackBar(
+                        content: Text('$item removed from favorites'),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                        action: SnackBarAction(
+                          label: 'Undo',
+                          onPressed: () {
+                            // Perform undo action
+                            setState(() {
+                              AppState.favoriteItems.insert(index, item);
+                            });
+                          },
+                        ),
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

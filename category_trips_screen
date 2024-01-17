@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:store_app/app_data.dart';
+import 'package:store_app/widgets/trip_item.dart';
+
+class CategoryTripsScreen extends StatelessWidget {
+  const CategoryTripsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final routeArgument =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    // ignore: unused_local_variable
+    final categoryId = routeArgument['id'];
+    final categoryTitle = routeArgument['title'];
+    final filteredTrips = Trips_data.where((trip) {
+      return trip.categories.contains(categoryId);
+    }).toList();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(categoryTitle!), // Use the provided categoryTitle
+      ),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          return TripItem(
+              title: filteredTrips[index].title,
+              id: filteredTrips[index].id,
+              imageUrl: filteredTrips[index].imageUrl,
+              price: filteredTrips[index].price,
+              description: filteredTrips[index].description,
+              delivery: filteredTrips[index].delivery,
+              made: filteredTrips[index].made,
+              quantity: filteredTrips[index].quantity,
+              guarantee: filteredTrips[index].guarantee,
+              phone: filteredTrips[index].phone);
+        },
+        itemCount: filteredTrips.length,
+      ),
+    );
+  }
+}

@@ -1,0 +1,199 @@
+import 'package:flutter/material.dart';
+import 'package:store_app/screens/trip_detail_screen.dart';
+
+class CategoryScreen extends StatelessWidget {
+  static const screenRoute = '/categorypage';
+
+  const CategoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Offer Page',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: ListView(
+        children: [
+          CategoryItem(
+            title: 'Smartphones Sale',
+            description:
+                'Discover the latest smartphones at discounted prices. Enjoy cutting-edge technology with our exclusive smartphone sale. Price: \$599.99, Guarantee: 1 year, Category: Electronics. Don\'t miss out on this limited-time offer!',
+            imageUrl: 'images/12345.jpeg',
+            onTap: () {},
+          ),
+          CategoryItem(
+            title: 'Laptop Deals',
+            description:
+                'Explore high-performance laptops with exclusive deals. Whether you need a laptop for work or play, our selection has something for everyone. Price: \$1299.99, Guarantee: 2 years, Category: Electronics. Upgrade your computing experience now!',
+            imageUrl: 'images/paodod.jpeg',
+            onTap: () {},
+          ),
+          CategoryItem(
+            title: 'Audio Gadgets Offers',
+            description:
+                'Immerse yourself in superior audio quality with our audio gadgets offers. From headphones to speakers, elevate your sound experience. Price: \$129.99, Guarantee: 1 year, Category: Electronics. Enhance your auditory senses today!',
+            imageUrl: 'images/pakd.jpeg',
+            onTap: () {},
+          ),
+          CategoryItem(
+            title: 'Gaming Gear Deals',
+            description:
+                'Level up your gaming experience with our gaming gear deals. Discover gaming laptops, accessories, and more at unbeatable prices. Price: \$69.99 - \$1499.99, Guarantee: Varies by item, Category: Electronics. Dominate the virtual world!',
+            imageUrl: 'images/skdl.jpeg',
+            onTap: () {},
+          ),
+          CategoryItem(
+            title: 'Home Appliance Bonanza',
+            description:
+                'Revamp your home with our home appliance bonanza. From smart appliances to essential gadgets, find everything you need for a modern home. Price: \$49.99 - \$1999.99, Guarantee: 2 years, Category: Electronics. Transform your living space!',
+            imageUrl: 'images/ddf.jpeg',
+            onTap: () {},
+          ),
+          CategoryItem(
+            title: 'Smartphone Spectacular',
+            description:
+                'Stay connected with the latest smartphones in our spectacular collection. Explore cutting-edge features and designs. Price: \$299.99 - \$1299.99, Guarantee: 1 year, Category: Electronics. Upgrade to the future!',
+            imageUrl: 'images/wpsk.jpeg',
+            onTap: () {},
+          ),
+          CategoryItem(
+            title: 'Audio Delights',
+            description:
+                'Immerse yourself in high-quality sound with our audio delights. Discover headphones, speakers, and more for an exceptional audio experience. Price: \$49.99 - \$499.99, Guarantee: 1 year, Category: Electronics. Elevate your auditory senses!',
+            imageUrl: 'images/pln.jpeg',
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CategoryItem extends StatelessWidget {
+  final String title;
+  final String description;
+  final String imageUrl;
+  final VoidCallback onTap;
+
+  const CategoryItem({
+    Key? key,
+    required this.title,
+    required this.description,
+    required this.imageUrl,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 4,
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Stack(
+              clipBehavior: Clip.antiAlias,
+              alignment: Alignment.center,
+              children: [
+                Image.asset(
+                  imageUrl,
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.shopping_bag),
+                        onPressed: () {
+                          addToCart(title);
+                          Navigator.pushNamed(context, '/cartspage');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('$title added to cart'),
+                              duration: const Duration(seconds: 2),
+                              backgroundColor: Colors.blue,
+                            ),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.favorite),
+                        onPressed: () {
+                          if (!AppState.favoriteItems.contains(title)) {
+                            addToFavorites(title);
+                            Navigator.pushNamed(context, '/favoritespage');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('$title added to favorites'),
+                                duration: const Duration(seconds: 2),
+                                backgroundColor: Colors.blue,
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('This item is already in favorites'),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    description,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CategoryDetailScreen extends StatelessWidget {
+  static const screenRoute = '/categorydetail';
+
+  const CategoryDetailScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final category = ModalRoute.of(context)!.settings.arguments as String;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('$category Details'),
+      ),
+      body: Center(
+        child: Text('Details for $category'),
+      ),
+    );
+  }
+}

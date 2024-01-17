@@ -1,0 +1,197 @@
+import 'package:flutter/material.dart';
+import 'package:store_app/screens/trip_detail_screen.dart';
+
+class TripItem extends StatelessWidget {
+  final String? title;
+  final String? id;
+  final String? imageUrl;
+  final String? price;
+  final String? guarantee;
+  final String? description;
+  final String? made;
+  final String? delivery;
+  final String? quantity;
+  final String? phone;
+  final List<String>? categories;
+
+  const TripItem(
+      {super.key,
+      this.title,
+      this.id,
+      this.imageUrl,
+      this.price,
+      this.guarantee,
+      this.description,
+      this.made,
+      this.delivery,
+      this.phone,
+      this.quantity,
+      this.categories});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => selectTrip(context),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        elevation: 30,
+        margin: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(20),
+                  ),
+                  child: Image.asset(
+                    imageUrl!,
+                    height: 250,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  height: 250,
+                  alignment: Alignment.bottomLeft,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withOpacity(0),
+                        Colors.black.withOpacity(0.8),
+                      ],
+                    ),
+                  ),
+                  child: Text(
+                    title!,
+                    // ignore: deprecated_member_use
+                    style: Theme.of(context).textTheme.headline6,
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (id != null)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.info,
+                          color: Colors.amber,
+                        ),
+                        Text('ID: $id'),
+                      ],
+                    ),
+                  if (price != null)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.attach_money,
+                          color: Colors.green,
+                        ),
+                        Text('Price: \$$price'),
+                      ],
+                    ),
+                  if (guarantee != null)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.verified,
+                          color: Colors.blue,
+                        ),
+                        Text('Guarantee: $guarantee'),
+                      ],
+                    ),
+                  if (made != null)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                        ),
+                        Text('Made: $made'),
+                      ],
+                    ),
+                  if (quantity != null)
+                    Row(
+                      children: [
+                        const Icon(Icons.production_quantity_limits,
+                            color: Color.fromARGB(255, 54, 10, 154)),
+                        Text(
+                          'Quantity: $quantity',
+                        ),
+                      ],
+                    ),
+                  if (delivery != null)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.local_shipping,
+                          color: Color.fromARGB(255, 198, 180, 15),
+                        ),
+                        Text(
+                          'Delivery: $delivery',
+                        ),
+                      ],
+                    ),
+                  if (phone != null)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.phone,
+                          color: Color.fromARGB(255, 73, 180, 76),
+                        ),
+                        Text('Phone: $phone'),
+                      ],
+                    ),
+                  if (categories != null)
+                    Row(
+                      children: [
+                        const Icon(Icons.category),
+                        Text('Categories: ${categories?.join(', ')}'),
+                      ],
+                    ),
+                  GestureDetector(
+                    onTap: () => showMoreDetails(context),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.info,
+                          color: Colors.amber,
+                        ),
+                        Text('Click image for shop'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void selectTrip(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(TripDetailScreen.screenRoute, arguments: id);
+  }
+
+  void showMoreDetails(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(TripDetailScreen.screenRoute, arguments: description);
+  }
+}

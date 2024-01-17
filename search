@@ -1,0 +1,1150 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class Trip {
+  late final String title;
+
+  // Constructor to initialize title
+  Trip(
+      {required this.title,
+      required List<String> categories,
+      required String id,
+      required String imageUrl,
+      required String price,
+      required String description,
+      required String made,
+      required String guarantee,
+      required String quantity,
+      required String delivery,
+      required String phone});
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CustomSearchDelegate(),
+              );
+            },
+          ),
+        ],
+      ),
+      body: const Center(),
+    );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate<String> {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+          Navigator.of(context).pop(); // Navigate back
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Center(
+        child: Text(
+          '$query is not found',
+          style: const TextStyle(color: Colors.black),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final List<String> suggestions = _getSuggestions(query);
+
+    return ListView.builder(
+      itemCount: suggestions.length,
+      itemBuilder: (context, index) {
+        final suggestion = suggestions[index];
+        return ListTile(
+          title: Text(suggestion),
+          onTap: () {
+            query = suggestion;
+            _navigateToItemDetails(context, suggestion);
+          },
+        );
+      },
+    );
+  }
+
+  // Mock function to generate suggestions based on the query
+  List<String> _getSuggestions(String query) {
+    // Replace the mock titles with actual titles from Trips_data
+    final List<Trip> tripsData = [
+      Trip(
+        id: '1',
+        categories: ['Laptops'],
+        title: 'Apple Laptop',
+        imageUrl: 'images/apple.jpeg',
+        price: '1000',
+        description:
+            'The state-of-the-art features include a high-resolution display, lightning-fast processors, and an advanced operating system that redefines user experience. Elevate your productivity, creativity, and entertainment with the Apple Laptop. Whether you are a content creator, a business professional, or a tech-savvy individual, this laptop is your gateway to unparalleled possibilities.',
+        made: 'USA',
+        guarantee: '1 year',
+        quantity: '2',
+        delivery: 'Free',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '2',
+        categories: ['Laptops'],
+        title: 'HP Laptop',
+        imageUrl: 'images/hp2.jpeg',
+        price: '1200',
+        description:
+            'The HP Laptop is designed to keep up with your dynamic lifestyle. Whether you are a professional on the go or a creative mind pushing the boundaries, this laptop delivers reliability and power. Featuring a stunning display, powerful processors, and an elegant design, the HP Laptop is a statement of sophistication and innovation. Enjoy the freedom of express delivery, and rest easy with a generous 2-year guarantee. Elevate your computing experience with the HP Laptop – where performance meets elegance.',
+        made: 'USA',
+        guarantee: '2 years',
+        quantity: '4',
+        delivery: 'Express',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '3',
+        categories: ['Laptops'],
+        title: 'Asus Laptop',
+        imageUrl: 'images/asus.jpeg',
+        price: '900',
+        description:
+            'Whether you are a creative professional or a student, the Asus Laptop caters to your needs with precision and efficiency. Featuring a slim design and powerful internals, it is the ideal companion for those who demand the best. The vibrant display and immersive audio enhance your multimedia experience, making every task a delight. Crafted in Taiwan, known for its technological prowess, and backed by a 1-year guarantee, the Asus Laptop is your ticket to a world of possibilities.',
+        made: 'Taiwan',
+        guarantee: '1 year',
+        quantity: '5',
+        delivery: 'Standard',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '4',
+        categories: ['Laptops'],
+        title: 'HP EliteBook',
+        imageUrl: 'images/hp.jpeg',
+        price: '1500',
+        description:
+            'This powerful business-grade laptop is meticulously engineered to meet the demands of professionals. With its robust build, advanced security features, and powerful performance, the HP EliteBook ensures that you stay ahead in the corporate world. Backed by a 3-year guarantee, you can trust the reliability and durability of the HP EliteBook. Express your business prowess with this premium laptop, proudly made in the USA. Choose express delivery for swift service.',
+        made: 'USA',
+        guarantee: '3 years',
+        quantity: '7',
+        delivery: 'Express',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '5',
+        categories: ['Laptops'],
+        title: 'Dell Latitude',
+        imageUrl: 'images/delllattitude.jpeg',
+        price: '1300',
+        description:
+            'Dive into productivity with the Dell Latitude series laptop. Crafted in the USA, it combines power and elegance, ensuring a seamless user experience. With a 2-year guarantee, standard delivery, and a sleek design, this laptop is your gateway to efficiency.',
+        made: 'USA',
+        guarantee: '2 years',
+        quantity: '4',
+        delivery: 'Standard',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '6',
+        categories: ['Laptops'],
+        title: 'Lenovo Ideapad',
+        imageUrl: 'images/lenovo.jpeg',
+        price: '1000',
+        description:
+            'Embrace portability with the Lenovo Ideapad, a slim and lightweight companion for your on-the-go lifestyle. Manufactured in China with a 1-year guarantee and free delivery, it effortlessly balances performance and style.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '3',
+        delivery: 'Free',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '7',
+        categories: ['Laptops'],
+        title: 'Lenovo ThinkPad',
+        imageUrl: 'images/lenovothinkpad.jpeg',
+        price: '1800',
+        description:
+            'Premium business-grade and elevate your work standards with the Lenovo ThinkPad, a premium business-grade laptop from China. Boasting a 3-year guarantee and express delivery, it is designed for professionals who demand excellence.',
+        made: 'China',
+        guarantee: '3 years',
+        quantity: '5',
+        delivery: 'Express',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '8',
+        categories: ['Laptops'],
+        title: 'Sony Vaio',
+        imageUrl: 'images/SonyVaio.jpeg',
+        price: '1600',
+        description:
+            'Immerse yourself in the world of elegance with the Sony Vaio laptop, a Japanese masterpiece. With a 2-year guarantee, standard delivery, and a commitment to style, this laptop redefines sophistication.',
+        made: 'Japan',
+        guarantee: '2 years',
+        quantity: '5',
+        delivery: 'Standard',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '9',
+        categories: ['Laptops'],
+        title: 'Toshiba Laptop',
+        imageUrl: 'images/toshiba-laptop.jpeg',
+        price: '1100',
+        description:
+            'Rely on the Toshiba Laptop for your computing needs. Crafted in Japan with a 1-year guarantee and free delivery, it combines reliability and performance in a sleek ',
+        made: 'Japan',
+        guarantee: '1 year',
+        quantity: '13',
+        delivery: 'Free',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '10',
+        categories: ['Smartphones'],
+        title: 'iPhone 13',
+        imageUrl: 'images/i1.jpeg',
+        price: '1100',
+        description:
+            'Experience the pinnacle of technology with the high-end iPhone 13, proudly made in the USA. Boasting a 1-year guarantee and express delivery, this smartphone is a symbol of innovation.',
+        made: 'USA',
+        guarantee: '1 year',
+        quantity: '42',
+        delivery: 'Express',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '11',
+        categories: ['Smartphones'],
+        title: 'iPhone X',
+        imageUrl: 'images/i3.jpeg',
+        price: '500',
+        description:
+            'Discover the latest in mobile technology with the iPhone X. Crafted in the USA with a 2-year guarantee and standard delivery, it is a perfect blend of style and performance.',
+        made: 'USA',
+        guarantee: '2 years',
+        quantity: '23',
+        delivery: 'Standard',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '12',
+        categories: ['Smartphones'],
+        title: 'Sony Xperia Z',
+        imageUrl: 'images/s1.jpeg',
+        price: '650',
+        description:
+            'Dive into the world of high-quality and waterproof smartphones with the Sony Xperia Z. Hailing from South Korea, it comes with a 1-year guarantee and free delivery, ensuring durability and style.',
+        made: 'South Korea',
+        guarantee: '1 year',
+        quantity: '12',
+        delivery: 'Free',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '13',
+        categories: ['Headphones'],
+        title: 'Beats',
+        imageUrl: 'images/images (1).jpeg',
+        price: '149.99',
+        description:
+            'Immerse yourself in high-quality wireless audio with Beats headphones, proudly made in the USA. With a 1-year guarantee and free shipping within the USA, it is a must-have for music enthusiasts.',
+        made: 'USA',
+        guarantee: '1 year',
+        quantity: '21',
+        delivery: 'Free shipping within the USA',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '14',
+        categories: ['Headphones'],
+        title: 'Sonic',
+        imageUrl: 'images/images.jpeg',
+        price: '79.99',
+        description:
+            'Elevate your auditory experience with Sonic headphones. Engineered in China with a 2-year guarantee, they deliver powerful and immersive sound, making them ideal for audiophiles worldwide.',
+        made: 'China',
+        guarantee: '2 years',
+        quantity: '20',
+        delivery: 'International shipping available',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '15',
+        categories: ['Headphones'],
+        title: 'Core',
+        imageUrl: 'images/download.jpeg',
+        price: '129.99',
+        description:
+            'Unleash studio-quality audio with Core headphones, crafted in Germany. With a 1.5-year guarantee and free shipping within Europe, these headphones redefine your music listening experience.',
+        made: 'Germany',
+        guarantee: '1.5 years',
+        quantity: '13',
+        delivery: 'Free shipping within Europe',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '16',
+        categories: ['Headphones'],
+        title: 'Beats',
+        imageUrl: 'images/pppp.jpeg',
+        price: '199.99',
+        description:
+            'Delight in premium sound with Beats headphones, delivering an unparalleled audio experience. Made in the USA with a 1-year guarantee and free shipping within the USA, they are the epitome of audio perfection.',
+        made: 'USA',
+        guarantee: '1 year',
+        quantity: '41',
+        delivery: 'Free shipping within the USA',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '17',
+        categories: ['Headphones'],
+        title: 'Glynzac',
+        imageUrl: 'images/ppp.jpeg',
+        price: '149.99',
+        description:
+            'Combine style with high-fidelity sound using Glynzac headphones, an Italian masterpiece. With a 2-year guarantee and international shipping available, they redefine your fashion statement.',
+        made: 'Italy',
+        guarantee: '2 years',
+        quantity: '24',
+        delivery: 'International shipping available',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '18',
+        categories: ['Cameras'],
+        title: 'Canon EOS Rebel T7',
+        imageUrl: 'images/downloadkj.jpeg',
+        price: '699.99',
+        description:
+            'Capture every moment with the Canon EOS Rebel T7, featuring a 24.1MP sensor and Full HD capabilities. Crafted in Japan with a 1-year guarantee and free shipping within the USA, it is your perfect photography companion.',
+        made: 'Japan',
+        guarantee: '1 year',
+        quantity: '45',
+        delivery: 'Free shipping within the USA',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '19',
+        categories: ['Cameras'],
+        title: 'FujiFilm',
+        imageUrl: 'images/download (1).jpeg',
+        price: '799.99',
+        description:
+            'Unleash your creativity with FujiFilm cameras, boasting a 26.1MP sensor and Japanese precision. With a 2-year guarantee and international shipping available, these cameras redefine photography.',
+        made: 'Japan',
+        guarantee: '2 years',
+        quantity: '9',
+        delivery: 'International shipping available',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '20',
+        categories: ['Cameras'],
+        title: 'Canon EOS RS',
+        imageUrl: 'images/imagesj.jpeg',
+        price: '2499.99',
+        description:
+            'Experience photography like never before with the Canon EOS RS, featuring a 45MP sensor and autofocus. Crafted in Japan with a 1.5-year guarantee and free shipping within Europe, it is a professional is choice.',
+        made: 'Japan',
+        guarantee: '1.5 years',
+        quantity: '19',
+        delivery: 'Free shipping within Europe',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '21',
+        categories: ['Cameras'],
+        title: 'Sony Alpha a7 III',
+        imageUrl: 'images/imagesk.jpeg',
+        price: '1999.99',
+        description:
+            'Embrace full-frame photography with the Sony Alpha a7 III, featuring a 24.2MP sensor. Crafted in Japan with a 2-year guarantee and international shipping available, it is a favorite among photography enthusiasts.',
+        made: 'Japan',
+        guarantee: '2 years',
+        quantity: '26',
+        delivery: 'International shipping available',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '22',
+        categories: ['Cameras'],
+        title: 'Panasonic Lumix GH5',
+        imageUrl: 'images/imageslu.jpeg',
+        price: '1499.99',
+        description:
+            'Unleash your creativity with the Panasonic Lumix GH5, boasting a 20.3MP sensor. Crafted in Japan with a 1-year guarantee and free shipping within the USA, it is a reliable choice for videographers.',
+        made: 'Japan',
+        guarantee: '1 year',
+        quantity: '19',
+        delivery: 'Free shipping within the USA',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '23',
+        categories: ['Cameras'],
+        title: 'Canon EOS 5D Mark IV',
+        imageUrl: 'images/gugikuh.jpeg',
+        price: '2999.99',
+        description:
+            'Capture every detail with the Canon EOS 5D Mark IV, featuring a full-frame 30.4MP sensor. Crafted in Japan with a 2-year guarantee and international shipping available, it is a favorite among professionals.',
+        made: 'Japan',
+        guarantee: '2 years',
+        quantity: '28',
+        delivery: 'International shipping available',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '24',
+        categories: ['Cameras'],
+        title: 'Nikon D5',
+        imageUrl: 'images/nav-dslr.jpeg',
+        price: '5499.99',
+        description:
+            'Elevate your photography game with the Nikon D5, boasting a flagship 20.8MP sensor. Crafted in Japan with a 3-year guarantee and free shipping worldwide, it is a powerhouse for photographers.r',
+        made: 'Japan',
+        guarantee: '3 years',
+        quantity: '26',
+        delivery: 'Free shipping worldwide',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '25',
+        categories: ['Speakers'],
+        title: 'ELAC Speakers',
+        imageUrl: 'images/hdjd.jpeg',
+        price: '499.99',
+        description:
+            'Immerse yourself in high-quality audio with ELAC Speakers, crafted in Germany. With a 1-year guarantee and free shipping within the US, they redefine your audio experience.',
+        made: 'Germany',
+        guarantee: '1 year',
+        quantity: '52',
+        delivery: 'Free shipping within the US',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '26',
+        categories: ['Speakers'],
+        title: 'BOSE 251',
+        imageUrl: 'images/ojp.jpeg',
+        price: '349.99',
+        description:
+            'Enhance your PC audio with BOSE 251 speakers, delivering powerful sound. Made in the United States with a 2-year guarantee, they offer worldwide shipping.',
+        made: 'United States',
+        guarantee: '2 years',
+        quantity: '74',
+        delivery: 'Shipping available worldwide',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '27',
+        categories: ['Speakers'],
+        title: 'JBL Flip 5',
+        imageUrl: 'images/lhpo.jpeg',
+        price: '129.99',
+        description:
+            'Immerse yourself in bold sound and waterproof design with JBL Flip 5 speakers. Engineered in China with a 1-year guarantee, they offer free shipping on orders over 50\$.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '32',
+        delivery: 'Free shipping on orders over 50\$',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '28',
+        categories: ['Speakers'],
+        title: 'JBL Charge 4',
+        imageUrl: 'images/cpf.jpeg',
+        price: '179.99',
+        description:
+            'Power up your audio experience with JBL Charge 4 speakers, featuring a built-in power bank for charging. Made in China with a 1-year guarantee, they offer free shipping on orders over \$75.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '21',
+        delivery: 'Free shipping on orders over 75\$',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '29',
+        categories: ['Speakers'],
+        title: 'JL - C2-400X',
+        imageUrl: 'images/ldf.jpeg',
+        price: '89.99',
+        description:
+            'Elevate your car audio with JL - C2-400X speakers, featuring a 4-inch Coaxial design. Crafted in the United States.',
+        made: 'United States',
+        guarantee: '6 months',
+        quantity: '43',
+        delivery: 'Available for local pickup',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '30',
+        categories: ['Speakers'],
+        title: 'SONY Car Audio Speakers Oval',
+        imageUrl: 'images/dvop.jpeg',
+        price: '69.99',
+        description:
+            'Experience enhanced in-car audio with SONY Car Audio Speakers Oval, crafted in Japan. With a 1-year guarantee and international shipping available, these speakers redefine your driving soundtrack.',
+        made: 'Japan',
+        guarantee: '1 year',
+        quantity: '45',
+        delivery: 'International shipping available',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '31',
+        categories: ['Speakers'],
+        title: '6 speakers FXRS',
+        imageUrl: 'images/aja.jpeg',
+        price: '299.99',
+        description:
+            'Transform your space into a theater-like audio haven with the 6 speakers FXRS set. Designed in France with a 2-year guarantee, they come with free local delivery.',
+        made: 'France',
+        guarantee: '2 years',
+        quantity: '64',
+        delivery: 'Free local delivery',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '32',
+        categories: ['Speakers'],
+        title: 'Kanto YU6GW Powered Bookshelf',
+        imageUrl: 'images/jaj.jpeg',
+        price: '399.99',
+        description:
+            'Immerse yourself in versatile audio with Kanto YU6GW Powered Bookshelf speakers. Engineered in China with a 1-year guarantee and free delivery, they bring premium sound to your space.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '25',
+        delivery: 'Free',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '33',
+        categories: ['Speakers'],
+        title: 'NOOTRY',
+        imageUrl: 'images/81i9dQ-G3LL.jpeg',
+        price: '129.99',
+        description:
+            'Enjoy on-the-go audio for small spaces with NOOTRY speakers. Crafted in China with a 6-month guarantee, they offer international shipping for music enthusiasts worldwide.',
+        made: 'China',
+        guarantee: '6 months',
+        quantity: '30',
+        delivery: 'International shipping available',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '34',
+        categories: ['Home Appliances'],
+        title: 'Singer Iron',
+        imageUrl: 'images/poj.jpeg',
+        price: '49.99',
+        description:
+            'Fulfill your ironing needs with the powerful Singer Iron, proudly made in the USA. With a 1-year guarantee and free shipping, it ensures efficiency in your daily chores.',
+        made: 'USA',
+        guarantee: '1-year',
+        quantity: '37',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '35',
+        categories: ['Home Appliances'],
+        title: 'S Toaster',
+        imageUrl: 'images/kjbl.jpeg',
+        price: '29.99',
+        description:
+            'Elevate your kitchen with the S Toaster, delivering high-quality performance. Crafted in Japan with a 2-year guarantee, a small shipping fee ensures this toaster is a staple in your culinary adventures.',
+        made: 'Japan',
+        guarantee: '2-years',
+        quantity: '75',
+        delivery: 'Shipping fee is 5\$',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '36',
+        categories: ['Home Appliances'],
+        title: 'Toshiba Oven',
+        imageUrl: 'images/kjb.jpeg',
+        price: '129.99',
+        description:
+            'Master the art of baking and cooking with the Toshiba Oven. Hailing from South Korea, it comes with a 3-year guarantee and free shipping, making it a reliable kitchen companion.',
+        made: ' South Korea',
+        guarantee: '3-years',
+        quantity: '37',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '37',
+        categories: ['Home Appliances'],
+        title: 'Spark Iron',
+        imageUrl: 'images/kln.jpeg',
+        price: '39.99',
+        description:
+            'Embrace spark technology in your ironing routine with the Spark Iron from China. With a 1-year guarantee and a nominal shipping fee, it ensures your clothes look crisp and polished.',
+        made: 'China',
+        guarantee: '1-year',
+        quantity: '9',
+        delivery: 'Shipping fee 3\$',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '38',
+        categories: ['Home Appliances'],
+        title: 'Toshiba Washing Machine',
+        imageUrl: 'images/dx.jpeg',
+        price: '299.99',
+        description:
+            'Experience efficient laundry with the Toshiba Washing Machine, crafted in Japan. Boasting a 5-year guarantee and free shipping, it brings convenience to your home.e',
+        made: 'Japan',
+        guarantee: '5-years',
+        quantity: '32',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '39',
+        categories: ['Home Appliances'],
+        title: 'SONY Airfryer 4',
+        imageUrl: 'images/lhl.jpeg',
+        price: '149.99',
+        description:
+            'Explore advanced cooking technology with the SONY Airfryer 4, designed in Japan. With a 2-year guarantee and free shipping, it adds a touch of innovation to your kitchen.',
+        made: 'Japan',
+        guarantee: '2-years',
+        quantity: '27',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '40',
+        categories: ['Home Appliances'],
+        title: 'Electric Jug',
+        imageUrl: 'images/Milton Go Electro.jpeg',
+        price: '19.99',
+        description:
+            'Boil water effortlessly with the Electric Jug from India. With a 1-year guarantee and a small shipping fee, it ensures you have hot water whenever you need it.',
+        made: 'India',
+        guarantee: '1-year',
+        quantity: '30',
+        delivery: 'Shipping fee is 5\$',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '41',
+        categories: ['Home Appliances'],
+        title: 'Sony Airfryer 5',
+        imageUrl: 'images/airfryer.jpeg',
+        price: '179.99',
+        description:
+            'Discover the convenience of multiple cooking presets with the Sony Airfryer 5, crafted in Japan. With a 3-year guarantee and free shipping, it revolutionizes your cooking experience.',
+        made: 'Japan',
+        guarantee: '3-years',
+        quantity: '27',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '42',
+        categories: ['Home Appliances'],
+        title: 'Toshiba Microwave',
+        imageUrl: 'images/microwave.jpeg',
+        price: '89.99',
+        description:
+            'Experience quick heating with the compact Toshiba Microwave, proudly made in Japan. With a 2-year guarantee and free shipping, it is a kitchen essential.',
+        made: 'Japan',
+        guarantee: '2-years',
+        quantity: '32',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '43',
+        categories: ['Home Appliances'],
+        title: 'Fermentation Microwave',
+        imageUrl: 'images/microwave2.jpeg',
+        price: '129.99',
+        description:
+            'Enhance your culinary skills with the Fermentation Microwave, featuring a unique fermentation feature. Crafted in Japan with a 4-year guarantee and free shipping, it is a kitchen innovation.',
+        made: 'Japan',
+        guarantee: '4-years',
+        quantity: '33',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '44',
+        categories: ['Gaming'],
+        title: 'Stand with Joystick',
+        imageUrl: 'images/kkkk.jpeg',
+        price: '49.99',
+        description:
+            'Level up your gaming experience with the adjustable Stand with Joystick from China. With a 1-year guarantee and free shipping, it ensures comfort and control in your gaming setup.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '54',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '45',
+        categories: ['Gaming'],
+        title: 'Xbox-Series S',
+        imageUrl: 'images/Xbox-Series S - 1TB(Black).jpeg',
+        price: '299.99',
+        description:
+            'Dive into the world of gaming with the Xbox-Series S, featuring 1TB of storage. Made in the USA with a 2-year guarantee, it comes with standard shipping for uninterrupted gaming sessions.',
+        made: 'USA',
+        guarantee: '2 years',
+        quantity: '30',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '46',
+        categories: ['Gaming'],
+        title: 'Play Station 4',
+        imageUrl: 'images/ps4 Slim.jpeg',
+        price: '249.99',
+        description:
+            'Immerse yourself in Sony PlayStation 4 gaming, crafted in Japan. With a 1.5-year guarantee and express shipping, it brings gaming excellence to your fingertips.',
+        made: 'Japan',
+        guarantee: '1.5 years',
+        quantity: '20',
+        delivery: 'Express shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '47',
+        categories: ['Gaming'],
+        title: 'Play Station 5',
+        imageUrl: 'images/ps5.jpeg',
+        price: '499.99',
+        description:
+            'Elevate your gaming with the Sony PlayStation 5, designed in Japan. Boasting a 2-year guarantee and express shipping, it ensures you stay ahead in the gaming world.',
+        made: 'Japan',
+        guarantee: '2 years',
+        quantity: '26',
+        delivery: 'Express shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '48',
+        categories: ['Gaming'],
+        title: 'Finger Joystick',
+        imageUrl: 'images/A1.jpeg',
+        price: '19.99',
+        description:
+            'Experience compact mobile gaming with the Finger Joystick from China. With a 1-year guarantee and standard shipping, it is designed for gaming on the go.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '90',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '49',
+        categories: ['Gaming'],
+        title: 'Joystick of XBOX',
+        imageUrl: 'images/ps.jpeg',
+        price: '29.99',
+        description:
+            'Enhance your Xbox gaming with the Joystick of XBOX, proudly made in the USA. With a 1.5-year guarantee and standard shipping, it ensures precision and control.',
+        made: 'USA',
+        guarantee: '1.5 years',
+        quantity: '21',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '50',
+        categories: ['Gaming'],
+        title: 'Play Station Joystick',
+        imageUrl: 'images/Best-Web-Tools-Gaming-Guest-Post-1.jpeg',
+        price: '24.99',
+        description:
+            'Enhance your Xbox gaming with the Joystick of XBOX, proudly made in the USA. With a 1.5-year guarantee and standard shipping, it ensures precision and control.',
+        made: 'Japan',
+        guarantee: '1 year',
+        quantity: '32',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '51',
+        categories: ['Gaming'],
+        title: 'Mobile Joystick',
+        imageUrl: 'images/pkh.jpeg',
+        price: '14.99',
+        description:
+            'Take mobile gaming to the next level with the attachable Mobile Joystick from China. With a 1-year guarantee and standard shipping, it adds control to your mobile gaming experience.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '32',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '52',
+        categories: ['Gaming'],
+        title: 'Stand phone',
+        imageUrl: 'images/klppo.jpeg',
+        price: '9.99',
+        description:
+            'Discover adjustable angles with the Stand phone, designed in China. With a 6-month guarantee and standard shipping, it provides a hands-free solution for your mobile device.',
+        made: 'China',
+        guarantee: '6 months',
+        quantity: '35',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '53',
+        categories: ['Accessories'],
+        title: 'Wall fire steel',
+        imageUrl: 'images/lk.jpeg',
+        price: '19.99',
+        description:
+            'Add a touch of style with the Wall fire steel accessory from China. With a 1-year guarantee and standard shipping, it enhances the aesthetic appeal of your space.',
+        made: 'China',
+        guarantee: '1-year',
+        quantity: '44',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '54',
+        categories: ['Accessories'],
+        title: 'Screwdriver',
+        imageUrl: 'images/li (1).jpeg',
+        price: '12.99',
+        description:
+            'A versatile screwdriver designed for all your DIY needs. Whether you are assembling furniture or working on home improvement projects, this German-made screwdriver is a reliable tool. It comes with a 2-year guarantee, and you can get it quickly with express shipping.',
+        made: 'Germany',
+        guarantee: '2-year',
+        quantity: '42',
+        delivery: 'Express shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '55',
+        categories: ['Accessories'],
+        title: 'Picker',
+        imageUrl: 'images/li (2).jpeg',
+        price: '8.99',
+        description:
+            'This picker is a handy and versatile tool that makes picking up and handling small items a breeze. Made in Japan, it is easy to use and suitable for various tasks. The picker comes with a 1-year guarantee and is available with standard shipping',
+        made: 'Japan',
+        guarantee: '1-year',
+        quantity: '26',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '56',
+        categories: ['Accessories'],
+        title: 'Adapter',
+        imageUrl: 'images/popppp.jpeg',
+        price: '14.99',
+        description:
+            'An universal adapter for electronic devices, perfect for travelers and tech enthusiasts. Made in the USA, this adapter comes with a 3-year guarantee and qualifies for free shipping. ',
+        made: 'USA',
+        guarantee: '3-year',
+        quantity: '26',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '57',
+        categories: ['Accessories'],
+        title: 'Wall mug with handle',
+        imageUrl: 'images/lasclm.jpeg',
+        price: '24.99',
+        description:
+            'Enjoy your favorite beverages in style with this wall mug featuring a comfortable handle. Made in Italy, this mug combines functionality with a modern design. It comes with a 2-year guarantee and is available with express shipping.',
+        made: 'Italy',
+        guarantee: '2-year',
+        quantity: '29',
+        delivery: 'Express shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '58',
+        categories: ['Cables'],
+        title: '4 Cable 4 Type Charge',
+        imageUrl: 'images/iihihkl.jpeg',
+        price: '29.99',
+        description:
+            'A versatile charging cable compatible with iPhone, standard USB, and C-Type devices. Made in China, this cable is a must-have for your electronic gadgets. It comes with a 1-year guarantee and is available with standard shipping.',
+        made: 'China',
+        guarantee: '1-year',
+        quantity: '129',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '59',
+        categories: ['Cables'],
+        title: 'Universal USB Cable',
+        imageUrl: 'images/kjjkjkjkj.jpeg',
+        price: '14.99',
+        description:
+            'This universal USB cable is suitable for iPhones and various other devices. Made in Taiwan, it is reliable and efficient. The cable comes with a 1-year guarantee and can be shipped with standard shipping.',
+        made: 'Taiwan',
+        guarantee: '1-year',
+        quantity: '127',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '60',
+        categories: ['Cables'],
+        title: 'Samsung Charger',
+        imageUrl: 'images/oiuy.jpeg',
+        price: '19.99',
+        description:
+            'A standard charger designed for Samsung devices, ensuring fast and reliable charging. Made in South Korea, this charger comes with a 2-year guarantee and is available with express shipping.',
+        made: 'South Korea',
+        guarantee: '2-year',
+        quantity: '102',
+        delivery: 'Express shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '61',
+        categories: ['Cables'],
+        title: 'Samsung Charger (2-Meter)',
+        imageUrl: 'images/lkjk.jpeg',
+        price: '24.99',
+        description:
+            'An extended 2-meter Samsung charger for added convenience. Made in South Korea, this charger comes with a 2-year guarantee and is available with express shipping.',
+        made: 'South Korea',
+        guarantee: '2-year',
+        quantity: '172',
+        delivery: 'Express shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '62',
+        categories: ['Cables'],
+        title: 'Samsung Adapter Charger',
+        imageUrl: 'images/klhklklklk.jpeg',
+        price: '34.99',
+        description:
+            'A faster charger designed for Samsung devices. Made in South Korea, this adapter comes with a 3-year guarantee and qualifies for free shipping.',
+        made: 'South Korea',
+        guarantee: '3-year',
+        quantity: '134',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '63',
+        categories: ['Cables'],
+        title: 'Double Cable',
+        imageUrl: 'images/xgfx.jpeg',
+        price: '18.99',
+        description:
+            'This double cable is designed for both iPhone and C-Type devices, providing versatility for your charging needs. Made in China, the cable comes with a 1-year guarantee and is available with standard shipping.',
+        made: 'China',
+        guarantee: '1-year',
+        quantity: '127',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '64',
+        categories: ['Wearables'],
+        title: 'LightlnTheBox',
+        imageUrl: 'images/LightlnTheBox.jpeg',
+        price: '39.99',
+        description:
+            'Stay fashionable with the LightlnTheBox, a stylish and trendy wearable from China. Priced at \$39.99, this wearable comes with a guarantee of 6 months and can be delivered with standard shipping.',
+        made: 'China',
+        guarantee: '6 months',
+        quantity: '200',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '65',
+        categories: ['Wearables'],
+        title: 'Greenlion Watch',
+        imageUrl: 'images/Greenlion.jpeg',
+        price: '59.99',
+        description:
+            'Elevate your style with the Greenlion Watch, an elegant and stylish timepiece from Switzerland. Priced at \$59.99, this watch comes with a 1-year guarantee and can be delivered with express shipping.',
+        made: 'Switzerland',
+        guarantee: '1 year',
+        quantity: '164',
+        delivery: 'Express shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '66',
+        categories: ['Wearables'],
+        title: 'Applewatch S8',
+        imageUrl: 'images/applewatch S8.jpeg',
+        price: '349.99',
+        description:
+            'Experience the latest in wearable technology with the Applewatch S8, the newest model from Apple. Priced at \$349.99, this USA-made smartwatch comes with a 2-year guarantee and qualifies for free shipping.',
+        made: 'USA',
+        guarantee: '2 years',
+        quantity: '63',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '67',
+        categories: ['Wearables'],
+        title: 'Jeteck IDS116',
+        imageUrl: 'images/Jeteck IDS116.jpeg',
+        price: '29.99',
+        description:
+            'Monitor your fitness with the Jeteck IDS116, a feature-rich fitness tracker from China. Priced at \$29.99, this tracker comes with a 1-year guarantee and can be delivered with standard shipping.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '244',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '68',
+        categories: ['Wearables'],
+        title: 'Greenlion Gl-Sw55',
+        imageUrl: 'images/Greenlion Gl-Sw55.jpeg',
+        price: '79.99',
+        description:
+            'Stay active with the Greenlion Gl-Sw55, a water-resistant wearable from Switzerland. Priced at \$79.99, this device comes with a 2-year guarantee and can be delivered with express shipping.',
+        made: 'Switzerland',
+        guarantee: '2 years',
+        quantity: '182',
+        delivery: 'Express shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '69',
+        categories: ['Wearables'],
+        title: 'huawei watch 3',
+        imageUrl: 'images/huawei watch 3.jpeg',
+        price: '249.99',
+        description:
+            'Embrace the features of the Huawei Watch 3, a versatile and feature-rich wearable from China. Priced at \$249.99, this watch comes with a 1-year guarantee and can be delivered with standard shipping.',
+        made: 'China',
+        guarantee: '1 year',
+        quantity: '37',
+        delivery: 'Standard shipping',
+        phone: '+96170022028',
+      ),
+      Trip(
+        id: '70',
+        categories: ['Wearables'],
+        title: 'Android watch',
+        imageUrl: 'images/android 4g watch.jpeg',
+        price: '199.99',
+        description:
+            'Explore the world of smartwatches with the Android 4G Watch, a 4G-enabled smartwatch from the USA. Priced at \$199.99, this watch comes with a 3-year guarantee and qualifies for free shipping.',
+        made: 'USA',
+        guarantee: '3 years',
+        quantity: '232',
+        delivery: 'Free shipping',
+        phone: '+96170022028',
+      ),
+    ];
+
+    final List<String> filteredTitles = tripsData
+        .where((trip) => trip.title.toLowerCase().contains(query.toLowerCase()))
+        .map((trip) => trip.title)
+        .toList();
+
+    return filteredTitles;
+  }
+}
+
+void _navigateToItemDetails(BuildContext context, String suggestion) {
+  // You can replace the MaterialPageRoute with your own navigation logic
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => ItemDetailsScreen(title: suggestion),
+    ),
+  );
+}
+
+class ItemDetailsScreen extends StatelessWidget {
+  final String title;
+
+  const ItemDetailsScreen({Key? key, required this.title}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Implement your item details screen here, using the provided title
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Item $title is found'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/');
+              },
+              child: const Text('Go to Home'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

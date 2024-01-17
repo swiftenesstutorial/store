@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:store_app/screens/cart_screen.dart';
+import 'package:store_app/screens/category_screen.dart';
+import 'package:store_app/screens/category_trips_screen.dart';
+import 'package:store_app/screens/favorites_screen.dart';
+import 'package:store_app/screens/login_page.dart';
+import 'package:store_app/screens/tabs_screen.dart';
+import 'package:store_app/screens/trip_detail_screen.dart';
+
+void main() {
+  runApp(const MyApp(
+    isLoggedIn: false,
+  ));
+}
+
+class MyApp extends StatelessWidget {
+  final bool isLoggedIn; // Add this
+
+  const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Store App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: ThemeData.light().textTheme.copyWith(
+              // ignore: deprecated_member_use
+              headline5: const TextStyle(
+                color: Colors.blue,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              // ignore: deprecated_member_use
+              headline6: const TextStyle(
+                color: Color.fromARGB(255, 158, 157, 157),
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+      ),
+      // Use conditional routing based on login state
+      initialRoute: isLoggedIn ? '/' : '/login',
+      routes: {
+        '/': (context) => const TabScreen(),
+        '/category-trips': (context) => const CategoryTripsScreen(),
+        '/trip-detail': (context) => const TripDetailScreen(),
+        '/categorypage': (context) => const CategoryScreen(),
+        '/favoritespage': (context) => const FavoritesScreen(),
+        '/cartspage': (context) => const CartScreen(),
+        '/login': (context) => const LoginPage(),
+      },
+    );
+  }
+}

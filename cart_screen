@@ -1,0 +1,89 @@
+import 'package:flutter/material.dart';
+import 'package:store_app/screens/trip_detail_screen.dart';
+
+class CartScreen extends StatefulWidget {
+  const CartScreen({Key? key}) : super(key: key);
+
+  static const screenRoute = '/cartspage';
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Cart Page',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: ListView.builder(
+        itemCount: AppState.cartItems.length,
+        itemBuilder: (context, index) {
+          final item = AppState.cartItems[index];
+
+          return Dismissible(
+            key: Key(item), // Unique key for each item
+            onDismissed: (direction) {
+              // Remove item from the list when dismissed
+              setState(() {
+                AppState.cartItems.removeAt(index);
+              });
+
+              // Show a snackbar indicating the item is removed
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('$item removed from cart'),
+                  duration: const Duration(seconds: 2),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            },
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 16.0),
+              child: const Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+            child: ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(item),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      // Remove item from the list when delete icon is pressed
+                      setState(() {
+                        AppState.cartItems.removeAt(index);
+                      });
+
+                      // Show a snackbar indicating the item is removed
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$item removed from cart'),
+                          duration: const Duration(seconds: 2),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

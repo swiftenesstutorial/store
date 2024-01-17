@@ -1,0 +1,223 @@
+import 'package:flutter/material.dart';
+import 'package:store_app/models/search.dart';
+import 'package:store_app/screens/Favorites_screen.dart';
+import 'package:store_app/screens/cart_screen.dart';
+import 'package:store_app/screens/categories_screen.dart';
+import 'package:store_app/screens/category_screen.dart';
+
+class TabScreen extends StatelessWidget {
+  const TabScreen({Key? key}) : super(key: key);
+
+  static const screenRoute = '/tabscreen';
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Khalifeh Store',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.search,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Search button pressed!'),
+                  ),
+                );
+              },
+            ),
+          ],
+          bottom: const TabBar(
+            tabs: [
+              Tab(
+                icon: Icon(
+                  Icons.home,
+                  color: Colors.black,
+                ),
+                text: 'Shop',
+              ),
+              Tab(
+                icon: Icon(
+                  Icons.flash_on,
+                  color: Colors.black,
+                ),
+                text: 'Offers',
+              ),
+              Tab(
+                icon: Icon(
+                  Icons.shopping_bag,
+                  color: Colors.black,
+                ),
+                text: 'Cart',
+              ),
+              Tab(
+                icon: Icon(
+                  Icons.favorite,
+                  color: Colors.black,
+                ),
+                text: 'Favorites',
+              ),
+            ],
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+            ),
+            indicatorColor: Colors.black,
+          ),
+        ),
+        drawer: Drawer(
+          backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(width: 8.0),
+                        Text(
+                          'My Profile',
+                          style: TextStyle(
+                            color: Colors.black,
+                            decorationColor: Colors.black,
+                            fontSize: 30,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.person,
+                            size: 80,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildElevatedButton(context, Icons.home, 'Shop', '/'),
+                  _buildElevatedButton(
+                      context, Icons.flash_on, 'Offer', '/categorypage'),
+                  _buildElevatedButton(
+                      context, Icons.shopping_bag, 'Cart', '/cartspage'),
+                  _buildElevatedButton(
+                      context, Icons.favorite, 'Favorites', '/favoritespage'),
+                ],
+              ),
+              _buildDrawerButton(context, Icons.laptop, 'Laptops', '/laptops'),
+              _buildDrawerButton(
+                  context, Icons.smartphone, 'Smartphones', '/smartphones'),
+              _buildDrawerButton(
+                  context, Icons.headphones, 'Headphones', '/headphones'),
+              _buildDrawerButton(
+                  context, Icons.camera_alt, 'Cameras', '/cameras'),
+              _buildDrawerButton(
+                  context, Icons.speaker, 'Speakers', '/speakers'),
+              _buildDrawerButton(
+                  context, Icons.home, 'Home Appliances', '/home_appliances'),
+              _buildDrawerButton(context, Icons.games, 'Gaming', '/gaming'),
+              _buildDrawerButton(
+                  context, Icons.light, 'Accessories', '/accessories'),
+              _buildDrawerButton(context, Icons.cable, 'Cables', '/cables'),
+              _buildDrawerButton(
+                  context, Icons.wifi, 'Wearables', '/wearables'),
+              const Divider(),
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            CategoriesScreen(),
+            CategoryScreen(),
+            CartScreen(),
+            FavoritesScreen(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Function to build the FloatingActionButton
+
+  Widget _buildDrawerButton(
+      BuildContext context, IconData icon, String text, String route) {
+    return Row(
+      children: [
+        const SizedBox(width: 8.0),
+        Icon(
+          icon,
+          size: 30,
+          color: Colors.blue,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(route);
+            },
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+Widget _buildElevatedButton(
+    BuildContext context, IconData icon, String label, String route) {
+  return ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      // ignore: deprecated_member_use
+      primary: Colors.blue, // Set the button background color to blue
+    ),
+    onPressed: () {
+      Navigator.pushNamed(context, route);
+    },
+    child: Column(
+      children: [
+        Icon(icon),
+        const SizedBox(height: 8),
+        Text(label),
+      ],
+    ),
+  );
+}
